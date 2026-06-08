@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'detail_page.dart';
 
 class Game {
   final String name;
@@ -74,6 +75,12 @@ class ListPage extends StatelessWidget {
           final game = games[index];
           return GestureDetector(
             onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailPage(game: game),
+                ),
+              );
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
