@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AvatarPage extends StatelessWidget {
-  final String imagePath;
-
-  const AvatarPage({super.key, required this.imagePath});
+  const AvatarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final imagePath = ModalRoute.of(context)!.settings.arguments as String;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(

@@ -7,6 +7,7 @@ class Game {
   final String description;
   final String imagePath;
   final String status;
+  final int releaseYear;
 
   Game({
     required this.name,
@@ -14,6 +15,7 @@ class Game {
     required this.description,
     required this.imagePath,
     required this.status,
+    required this.releaseYear,
   });
 }
 
@@ -24,6 +26,7 @@ final List<Game> games = [
     description: 'A story-driven open world RPG set in a visually stunning fantasy universe.',
     imagePath: 'assets/images/the_witcher_3.jpg',
     status: 'On Going',
+    releaseYear: 2015,
   ),
   Game(
     name: 'Undertale',
@@ -31,6 +34,7 @@ final List<Game> games = [
     description: 'A game where you dont have to kill anyone. Every monster can be spared.',
     imagePath: 'assets/images/undertale.png',
     status: 'On Going',
+    releaseYear: 2015,
   ),
   Game(
     name: 'Metal Gear Solid V',
@@ -38,6 +42,7 @@ final List<Game> games = [
     description: 'An open world stealth game following the story of Big Boss.',
     imagePath: 'assets/images/metal_gear_solid_v.png',
     status: 'Next Up',
+    releaseYear: 2015,
   ),
   Game(
     name: 'Deathloop',
@@ -45,14 +50,28 @@ final List<Game> games = [
     description: 'Two rival assassins trapped in a time loop on a mysterious island.',
     imagePath: 'assets/images/deathloop.png',
     status: 'Next Up',
+    releaseYear: 2021,
   ),
 ];
 
-class ListPage extends StatelessWidget {
+class ListPage extends StatefulWidget {
   const ListPage({super.key});
 
   @override
+  State<ListPage> createState() => _ListPageState();
+}
+
+class _ListPageState extends State<ListPage> {
+  final Map<String, bool> _expanded = {
+    'On Going': true,
+    'Next Up': true,
+  };
+
+  @override
   Widget build(BuildContext context) {
+    final onGoing = games.where((g) => g.status == 'On Going').toList();
+    final nextUp = games.where((g) => g.status == 'Next Up').toList();
+
     return Scaffold(
       backgroundColor: const Color(0xFF1B2838),
       appBar: AppBar(
@@ -62,72 +81,123 @@ class ListPage extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: GridView.builder(
+      body: ListView(
         padding: const EdgeInsets.all(12),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.66,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
+        children: [
+          _buildSection('On Going', onGoing),
+          const SizedBox(height: 16),
+          _buildSection('Next Up', nextUp),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSection(String title, List<Game> sectionGames) {
+    final isExpanded = _expanded[title] ?? true;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _expanded[title] = !isExpanded;
+            });
+          },
+          child: Row(
+            children: [
+              Icon(
+                isExpanded ? Icons.expand_less : Icons.expand_more,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
-        itemCount: games.length,
-        itemBuilder: (context, index) {
-          final game = games[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailPage(game: game),
+        const SizedBox(height: 8),
+        if (isExpanded)
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.66,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemCount: sectionGames.length,
+            itemBuilder: (context, index) {
+              final game = sectionGames[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/detail',
+                    arguments: game,
+                  );
+                },
+                child: Card(
+                  color: const Color(0xFF2A475E),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(6),
+                            topRight: Radius.circular(6),
+                          ),
+                          child: Image.asset(
+                            game.imagePath,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              game.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '${game.releaseYear}',
+                              style: const TextStyle(
+                                color: Color(0xFF8F98A0),
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Image.asset(
-                      game.imagePath,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  game.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: game.status == 'On Going'
-                        ? const Color(0xFF4C6B22)
-                        : const Color(0xFF2A475E),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: Text(
-                    game.status,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+          ),
+      ],
     );
   }
 }

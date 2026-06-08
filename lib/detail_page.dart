@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'list_page.dart';
-import 'avatar_page.dart';
 
 class DetailPage extends StatelessWidget {
-  final Game game;
-
-  const DetailPage({super.key, required this.game});
+  const DetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final game = ModalRoute.of(context)!.settings.arguments as Game;
+
     return Scaffold(
       backgroundColor: const Color(0xFF1B2838),
       appBar: AppBar(
@@ -25,11 +24,10 @@ class DetailPage extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => AvatarPage(imagePath: game.imagePath),
-                  ),
+                  '/avatar',
+                  arguments: game.imagePath,
                 );
               },
               child: Image.asset(
@@ -53,12 +51,24 @@ class DetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    game.genre,
-                    style: const TextStyle(
-                      color: Color(0xFF8F98A0),
-                      fontSize: 14,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        game.genre,
+                        style: const TextStyle(
+                          color: Color(0xFF8F98A0),
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        '${game.releaseYear}',
+                        style: const TextStyle(
+                          color: Color(0xFF8F98A0),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -67,23 +77,6 @@ class DetailPage extends StatelessWidget {
                       color: Color(0xFFDCDEE0),
                       fontSize: 14,
                       height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: game.status == 'On Going'
-                          ? const Color(0xFF4C6B22)
-                          : const Color(0xFF2A475E),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: Text(
-                      game.status,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                      ),
                     ),
                   ),
                 ],

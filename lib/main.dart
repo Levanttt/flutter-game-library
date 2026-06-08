@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'list_page.dart';
+import 'detail_page.dart';
+import 'avatar_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +15,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Game Library',
       debugShowCheckedModeBanner: false,
-      home: const ListPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const ListPage(),
+        '/detail': (context) => const DetailPage(),
+        '/avatar': (context) => const AvatarPage(),
+      },
     );
   }
 }
