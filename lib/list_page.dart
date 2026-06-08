@@ -27,7 +27,7 @@ final List<Game> games = [
   Game(
     name: 'Undertale',
     genre: 'RPG',
-    description: 'A game where you don\'t have to kill anyone. Every monster can be spared.',
+    description: 'A game where you dont have to kill anyone. Every monster can be spared.',
     imagePath: 'assets/images/undertale.png',
     status: 'On Going',
   ),
