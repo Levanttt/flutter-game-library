@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'main_page.dart';
 import 'list_page.dart';
 import 'detail_page.dart';
 import 'avatar_page.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const ListPage(),
+        '/': (context) => const MainPage(),
         '/detail': (context) => const DetailPage(),
         '/avatar': (context) => const AvatarPage(),
       },
