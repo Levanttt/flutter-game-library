@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'main_page.dart';
-import 'list_page.dart';
 import 'detail_page.dart';
 import 'avatar_page.dart';
 
