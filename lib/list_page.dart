@@ -18,6 +18,7 @@ class Game {
   });
 }
 
+//Sementara di hardcode dulu *emote izin
 final List<Game> games = [
   Game(
     name: 'The Witcher 3',
@@ -31,7 +32,7 @@ final List<Game> games = [
     name: 'Undertale',
     genre: 'RPG',
     description: 'A game where you dont have to kill anyone. Every monster can be spared.',
-    imagePath: 'assets/images/undertale.png',
+    imagePath: 'assets/images/undertale.jpg',
     status: 'On Going',
     releaseYear: 2015,
   ),
@@ -39,7 +40,7 @@ final List<Game> games = [
     name: 'Metal Gear Solid V',
     genre: 'Stealth Action',
     description: 'An open world stealth game following the story of Big Boss.',
-    imagePath: 'assets/images/metal_gear_solid_v.png',
+    imagePath: 'assets/images/metal_gear_solid_v.jpg',
     status: 'Next Up',
     releaseYear: 2015,
   ),
@@ -47,7 +48,7 @@ final List<Game> games = [
     name: 'Deathloop',
     genre: 'Action FPS',
     description: 'Two rival assassins trapped in a time loop on a mysterious island.',
-    imagePath: 'assets/images/deathloop.png',
+    imagePath: 'assets/images/deathloop.jpg',
     status: 'Next Up',
     releaseYear: 2021,
   ),
