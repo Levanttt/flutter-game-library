@@ -74,13 +74,6 @@ class _ListPageState extends State<ListPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF1B2838),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF171A21),
-        title: const Text(
-          'My Game Library',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [

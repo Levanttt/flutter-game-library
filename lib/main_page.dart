@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'list_page.dart';
 import 'history_page.dart';
 
@@ -7,20 +8,10 @@ class AddPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF1B2838),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF171A21),
-        title: const Text(
-          'Add Game',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      body: const Center(
-        child: Text(
-          'Add game coming soon',
-          style: TextStyle(color: Colors.grey),
-        ),
+    return const Center(
+      child: Text(
+        'Add game coming soon',
+        style: TextStyle(color: Colors.grey),
       ),
     );
   }
@@ -42,9 +33,37 @@ class _MainPageState extends State<MainPage> {
     const HistoryPage(),
   ];
 
+  final List<String> _titles = [
+    'My Game Library',
+    'Add Game',
+    'History',
+  ];
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_logged_in', false);
+
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF1B2838),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF171A21),
+        title: Text(
+          _titles[_currentIndex],
+          style: const TextStyle(color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: _logout,
+          ),
+        ],
+      ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFF171A21),
