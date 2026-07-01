@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'splash_screen.dart';
 import 'main_page.dart';
 import 'detail_page.dart';
 import 'avatar_page.dart';
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const MainPage(),
+        '/': (context) => const SplashScreen(),
+        '/home': (context) => const MainPage(),
         '/detail': (context) => const DetailPage(),
         '/avatar': (context) => const AvatarPage(),
       },
