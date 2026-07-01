@@ -39,17 +39,17 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1B2838),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.sports_esports,
-              color: Colors.white,
-              size: 80,
+            Image.asset(
+              'assets/logo/logo.png',
+              width: 100,
+              height: 100,
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Game Library',
               style: TextStyle(
                 color: Colors.white,
