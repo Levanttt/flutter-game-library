@@ -7,7 +7,7 @@ class OnboardingScreen extends StatelessWidget {
   Future<void> _finishOnboarding(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('is_first_launch', false);
-    Navigator.pushReplacementNamed(context, '/home');
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
