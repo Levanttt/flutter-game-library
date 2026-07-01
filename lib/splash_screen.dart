@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'onboarding_screen.dart';
-import 'login_screen.dart';
 import 'main_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,6 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final isFirstLaunch = prefs.getBool('is_first_launch') ?? true;
     final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+
+    if (!mounted) return;
 
     if (isFirstLaunch) {
       Navigator.pushReplacementNamed(context, '/onboarding');
