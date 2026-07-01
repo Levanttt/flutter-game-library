@@ -40,6 +40,39 @@ class _MainPageState extends State<MainPage> {
   ];
 
   Future<void> _logout() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF2A475E),
+        title: const Text(
+          'Logout',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'Apakah anda yakin mau keluar?',
+          style: TextStyle(color: Color(0xFF8F98A0)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text(
+              'Batal',
+              style: TextStyle(color: Color(0xFF8F98A0)),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('is_logged_in', false);
 
