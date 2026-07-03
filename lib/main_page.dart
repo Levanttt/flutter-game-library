@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'preferences_service.dart';
 import 'list_page.dart';
 import 'history_page.dart';
 
@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
           style: TextStyle(color: Colors.white),
         ),
         content: const Text(
-          'Apakah anda yakin mau keluar?',
+          'Yakin mau keluar?',
           style: TextStyle(color: Color(0xFF8F98A0)),
         ),
         actions: [
@@ -73,8 +73,8 @@ class _MainPageState extends State<MainPage> {
 
     if (confirm != true) return;
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('is_logged_in', false);
+    final service = PreferencesService();
+    await service.setLoggedIn(false);
 
     if (!mounted) return;
     Navigator.pushReplacementNamed(context, '/login');
