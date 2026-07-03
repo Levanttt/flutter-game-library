@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'onboarding_screen.dart';
-import 'main_page.dart';
+import 'preferences_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,13 +18,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkNavigation() async {
     await Future.delayed(const Duration(seconds: 2));
 
-    final prefs = await SharedPreferences.getInstance();
-    final isFirstLaunch = prefs.getBool('is_first_launch') ?? true;
-    final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+    final service = PreferencesService();
+    final seen = await service.hasSeenOnboarding();
+    final isLoggedIn = await service.isLoggedIn();
 
     if (!mounted) return;
 
-    if (isFirstLaunch) {
+    if (!seen) {
       Navigator.pushReplacementNamed(context, '/onboarding');
     } else if (isLoggedIn) {
       Navigator.pushReplacementNamed(context, '/home');

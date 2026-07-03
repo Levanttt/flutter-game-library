@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'preferences_service.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
-  Future<void> _finishOnboarding(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('is_first_launch', false);
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  Future<void> _finishOnboarding() async {
+    final service = PreferencesService();
+    await service.setOnboardingComplete();
+
+    if (!mounted) return;
     Navigator.pushReplacementNamed(context, '/login');
   }
 
@@ -53,7 +60,7 @@ class OnboardingScreen extends StatelessWidget {
                     backgroundColor: const Color(0xFF4C6B22),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  onPressed: () => _finishOnboarding(context),
+                  onPressed: _finishOnboarding,
                   child: const Text(
                     'Get Started',
                     style: TextStyle(color: Colors.white, fontSize: 16),
