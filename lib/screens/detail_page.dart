@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'list_page.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_text_styles.dart';
 import '../models/game.dart';
+import '../widgets/game_image.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
@@ -10,13 +12,10 @@ class DetailPage extends StatelessWidget {
     final game = ModalRoute.of(context)!.settings.arguments as Game;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1B2838),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF171A21),
-        title: Text(
-          game.name,
-          style: const TextStyle(color: Colors.white),
-        ),
+        backgroundColor: AppColors.appBar,
+        title: Text(game.name, style: AppTextStyles.appBarTitle),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
@@ -31,11 +30,11 @@ class DetailPage extends StatelessWidget {
                   arguments: game.imagePath,
                 );
               },
-              child: Image.asset(
-                game.imagePath,
+
+              child: GameImage(
+                game: game,
                 width: double.infinity,
                 height: 250,
-                fit: BoxFit.cover,
               ),
             ),
             Padding(
@@ -43,43 +42,17 @@ class DetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    game.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text(game.name, style: AppTextStyles.heading),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        game.genre,
-                        style: const TextStyle(
-                          color: Color(0xFF8F98A0),
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        '${game.releaseYear}',
-                        style: const TextStyle(
-                          color: Color(0xFF8F98A0),
-                          fontSize: 14,
-                        ),
-                      ),
+                      Text(game.genre, style: AppTextStyles.label),
+                      Text('${game.releaseYear}', style: AppTextStyles.label),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    game.description,
-                    style: const TextStyle(
-                      color: Color(0xFFDCDEE0),
-                      fontSize: 14,
-                      height: 1.5,
-                    ),
-                  ),
+                  Text(game.description, style: AppTextStyles.body),
                 ],
               ),
             ),

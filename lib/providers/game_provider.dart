@@ -52,6 +52,14 @@ class GameProvider extends ChangeNotifier {
     await _storage.saveGames(_games);
   }
 
-// Nanti dipanggil setelah integrasi Steam API jadi:
-// Future<void> syncFromSteam(List<Game> steamGames) async { ... }
+  Future<void> syncFromSteam(List<Game> steamGames) async {
+    for (final game in steamGames) {
+      final alreadyExists = _games.any((g) => g.id == game.id);
+      if (!alreadyExists) {
+        _games.add(game);
+      }
+    }
+    notifyListeners();
+    await _storage.saveGames(_games);
+  }
 }

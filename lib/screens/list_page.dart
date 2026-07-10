@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_text_styles.dart';
 import '../models/game.dart';
 import '../providers/game_provider.dart';
+import '../widgets/game_image.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -23,13 +26,10 @@ class _ListPageState extends State<ListPage> {
     final nextUp = gameProvider.nextUp;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1B2838),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF171A21),
-        title: const Text(
-          'My Game Library',
-          style: TextStyle(color: Colors.white),
-        ),
+        backgroundColor: AppColors.appBar,
+        title: const Text('My Game Library', style: AppTextStyles.appBarTitle),
       ),
       body: ListView(
         padding: const EdgeInsets.all(12),
@@ -57,14 +57,7 @@ class _ListPageState extends State<ListPage> {
                 color: Colors.white,
               ),
               const SizedBox(width: 6),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text(title, style: AppTextStyles.sectionTitle),
             ],
           ),
         ),
@@ -87,7 +80,7 @@ class _ListPageState extends State<ListPage> {
                   Navigator.pushNamed(context, '/detail', arguments: game);
                 },
                 child: Card(
-                  color: const Color(0xFF2A475E),
+                  color: AppColors.card,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
                   ),
@@ -100,19 +93,7 @@ class _ListPageState extends State<ListPage> {
                             topLeft: Radius.circular(6),
                             topRight: Radius.circular(6),
                           ),
-                          // Game dari Steam pakai URL (Image.network),
-                          // game input manual pakai asset lokal (Image.asset)
-                          child: game.isNetworkImage
-                              ? Image.network(
-                            game.imagePath,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          )
-                              : Image.asset(
-                            game.imagePath,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ),
+                          child: GameImage(game: game, width: double.infinity),
                         ),
                       ),
                       Padding(
@@ -122,22 +103,12 @@ class _ListPageState extends State<ListPage> {
                           children: [
                             Text(
                               game.name,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppTextStyles.cardTitle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 2),
-                            Text(
-                              '${game.releaseYear}',
-                              style: const TextStyle(
-                                color: Color(0xFF8F98A0),
-                                fontSize: 11,
-                              ),
-                            ),
+                            Text('${game.releaseYear}', style: AppTextStyles.caption),
                           ],
                         ),
                       ),
