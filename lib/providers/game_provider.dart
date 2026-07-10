@@ -36,17 +36,27 @@ class GameProvider extends ChangeNotifier {
   Future<void> updateGameStatus(String id, String newStatus) async {
     final index = _games.indexWhere((g) => g.id == id);
     if (index == -1) return;
-    final old = _games[index];
-    _games[index] = Game(
-      id: old.id,
-      name: old.name,
-      genre: old.genre,
-      description: old.description,
-      imagePath: old.imagePath,
-      isNetworkImage: old.isNetworkImage,
-      status: newStatus,
-      releaseYear: old.releaseYear,
-      source: old.source,
+    _games[index] = _games[index].copyWith(status: newStatus);
+    notifyListeners();
+    await _storage.saveGames(_games);
+  }
+
+  /// Dipanggil setelah SteamStoreService berhasil narik genre,
+  /// deskripsi, dan tahun rilis buat satu game. Hasilnya kesimpen
+  /// permanen, jadi enggak perlu fetch ulang tiap buka detail page
+  /// yang sama.
+  Future<void> updateGameDetails(
+      String id, {
+        required String genre,
+        required String description,
+        required int releaseYear,
+      }) async {
+    final index = _games.indexWhere((g) => g.id == id);
+    if (index == -1) return;
+    _games[index] = _games[index].copyWith(
+      genre: genre,
+      description: description,
+      releaseYear: releaseYear,
     );
     notifyListeners();
     await _storage.saveGames(_games);

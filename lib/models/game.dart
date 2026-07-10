@@ -26,20 +26,43 @@ class Game {
     this.source = GameSource.manual,
   });
 
+  /// Bikin salinan Game dengan sebagian field diganti.
+  /// Dipakai tiap kali cuma perlu update sebagian data (misal status
+  /// atau hasil fetch detail), tanpa perlu nulis ulang semua field.
+  Game copyWith({
+    String? genre,
+    String? description,
+    String? status,
+    int? releaseYear,
+  }) {
+    return Game(
+      id: id,
+      name: name,
+      genre: genre ?? this.genre,
+      description: description ?? this.description,
+      imagePath: imagePath,
+      isNetworkImage: isNetworkImage,
+      status: status ?? this.status,
+      releaseYear: releaseYear ?? this.releaseYear,
+      source: source,
+    );
+  }
+
   /// Dipakai nanti waktu convert data mentah dari Steam GetOwnedGames
   /// jadi objek Game yang dipahami app ini.
   factory Game.fromSteamJson(Map<String, dynamic> json) {
     final appId = json['appid'].toString();
-    final iconHash = json['img_icon_url'];
 
     return Game(
       id: 'steam_$appId',
       name: json['name'] ?? 'Unknown',
-      genre: 'Unknown',
+      genre: 'Steam Game',
       description: '',
-      imagePath: iconHash != null && iconHash != ''
-          ? 'https://media.steampowered.com/steamcommunity/public/images/apps/$appId/$iconHash.jpg'
-          : '',
+      // Versi "_2x" ini yang resolusi aslinya beneran 600x900.
+      // Tanpa _2x, nama filenya sama tapi isinya cuma 300x450, pecah
+      // kalau ditampilin di card yang agak besar.
+      imagePath:
+      'https://cdn.akamai.steamstatic.com/steam/apps/$appId/library_600x900_2x.jpg',
       isNetworkImage: true,
       status: 'Next Up',
       releaseYear: 0,
