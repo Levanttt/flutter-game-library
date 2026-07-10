@@ -1,58 +1,7 @@
 import 'package:flutter/material.dart';
-
-class Game {
-  final String name;
-  final String genre;
-  final String description;
-  final String imagePath;
-  final String status;
-  final int releaseYear;
-
-  Game({
-    required this.name,
-    required this.genre,
-    required this.description,
-    required this.imagePath,
-    required this.status,
-    required this.releaseYear,
-  });
-}
-
-//Sementara di hardcode dulu *emote izin
-final List<Game> games = [
-  Game(
-    name: 'The Witcher 3',
-    genre: 'Action RPG',
-    description: 'A story-driven open world RPG set in a visually stunning fantasy universe.',
-    imagePath: 'assets/images/the_witcher_3.jpg',
-    status: 'On Going',
-    releaseYear: 2015,
-  ),
-  Game(
-    name: 'Undertale',
-    genre: 'RPG',
-    description: 'A game where you dont have to kill anyone. Every monster can be spared.',
-    imagePath: 'assets/images/undertale.jpg',
-    status: 'On Going',
-    releaseYear: 2015,
-  ),
-  Game(
-    name: 'Metal Gear Solid V',
-    genre: 'Stealth Action',
-    description: 'An open world stealth game following the story of Big Boss.',
-    imagePath: 'assets/images/metal_gear_solid_v.jpg',
-    status: 'Next Up',
-    releaseYear: 2015,
-  ),
-  Game(
-    name: 'Deathloop',
-    genre: 'Action FPS',
-    description: 'Two rival assassins trapped in a time loop on a mysterious island.',
-    imagePath: 'assets/images/deathloop.jpg',
-    status: 'Next Up',
-    releaseYear: 2021,
-  ),
-];
+import 'package:provider/provider.dart';
+import '../models/game.dart';
+import '../providers/game_provider.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -69,11 +18,19 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final onGoing = games.where((g) => g.status == 'On Going').toList();
-    final nextUp = games.where((g) => g.status == 'Next Up').toList();
+    final gameProvider = context.watch<GameProvider>();
+    final onGoing = gameProvider.onGoing;
+    final nextUp = gameProvider.nextUp;
 
     return Scaffold(
       backgroundColor: const Color(0xFF1B2838),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF171A21),
+        title: const Text(
+          'My Game Library',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [
@@ -92,11 +49,7 @@ class _ListPageState extends State<ListPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
-          onTap: () {
-            setState(() {
-              _expanded[title] = !isExpanded;
-            });
-          },
+          onTap: () => setState(() => _expanded[title] = !isExpanded),
           child: Row(
             children: [
               Icon(
@@ -131,11 +84,7 @@ class _ListPageState extends State<ListPage> {
               final game = sectionGames[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/detail',
-                    arguments: game,
-                  );
+                  Navigator.pushNamed(context, '/detail', arguments: game);
                 },
                 child: Card(
                   color: const Color(0xFF2A475E),
@@ -151,7 +100,15 @@ class _ListPageState extends State<ListPage> {
                             topLeft: Radius.circular(6),
                             topRight: Radius.circular(6),
                           ),
-                          child: Image.asset(
+                          // Game dari Steam pakai URL (Image.network),
+                          // game input manual pakai asset lokal (Image.asset)
+                          child: game.isNetworkImage
+                              ? Image.network(
+                            game.imagePath,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          )
+                              : Image.asset(
                             game.imagePath,
                             fit: BoxFit.cover,
                             width: double.infinity,

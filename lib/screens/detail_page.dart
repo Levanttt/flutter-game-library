@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'list_page.dart';
+import '../models/game.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});

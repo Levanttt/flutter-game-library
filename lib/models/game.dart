@@ -1,0 +1,78 @@
+/// Menandai dari mana data game ini berasal.
+/// manual = user input sendiri lewat form Add Game
+/// steam  = ditarik otomatis dari Steam API
+enum GameSource { manual, steam }
+
+class Game {
+  final String id;
+  final String name;
+  final String genre;
+  final String description;
+  final String imagePath;
+  final bool isNetworkImage;
+  final String status;
+  final int releaseYear;
+  final GameSource source;
+
+  const Game({
+    required this.id,
+    required this.name,
+    required this.genre,
+    required this.description,
+    required this.imagePath,
+    this.isNetworkImage = false,
+    required this.status,
+    required this.releaseYear,
+    this.source = GameSource.manual,
+  });
+
+  /// Dipakai nanti waktu convert data mentah dari Steam GetOwnedGames
+  /// jadi objek Game yang dipahami app ini.
+  factory Game.fromSteamJson(Map<String, dynamic> json) {
+    final appId = json['appid'].toString();
+    final iconHash = json['img_icon_url'];
+
+    return Game(
+      id: 'steam_$appId',
+      name: json['name'] ?? 'Unknown',
+      genre: 'Unknown',
+      description: '',
+      imagePath: iconHash != null && iconHash != ''
+          ? 'https://media.steampowered.com/steamcommunity/public/images/apps/$appId/$iconHash.jpg'
+          : '',
+      isNetworkImage: true,
+      status: 'Next Up',
+      releaseYear: 0,
+      source: GameSource.steam,
+    );
+  }
+
+  /// Dipakai buat nyimpen ke SharedPreferences (diubah jadi JSON string)
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'genre': genre,
+    'description': description,
+    'imagePath': imagePath,
+    'isNetworkImage': isNetworkImage,
+    'status': status,
+    'releaseYear': releaseYear,
+    'source': source.name,
+  };
+
+  /// Dipakai buat baca balik dari SharedPreferences
+  factory Game.fromJson(Map<String, dynamic> json) => Game(
+    id: json['id'],
+    name: json['name'],
+    genre: json['genre'],
+    description: json['description'],
+    imagePath: json['imagePath'],
+    isNetworkImage: json['isNetworkImage'] ?? false,
+    status: json['status'],
+    releaseYear: json['releaseYear'],
+    source: GameSource.values.firstWhere(
+          (e) => e.name == json['source'],
+      orElse: () => GameSource.manual,
+    ),
+  );
+}
